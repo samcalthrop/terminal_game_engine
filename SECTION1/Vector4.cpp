@@ -52,6 +52,17 @@ void Vector4::mul(const Vector4& left, const Vector4& right, Vector4& dest){
     dest.w = left.w * right.w;
 }
 
+// linearly interpolate between 2 vectors based on a floating point, t,
+// representing a fraction of the distance between the 2 vectors, i.e 
+// t=0 -> point is at vec A, t=0.5 -> point is halfway between vec A dn vec B etc.
+
+void Vector4::lerp(const Vector4& a, const Vector4& b, float t, Vector4& dest){
+    dest.x = a.x + ((b.x - a.x) * t);
+    dest.y = a.y + ((b.y - a.y) * t);
+    dest.z = a.z + ((b.z - a.z) * t);
+    dest.w = a.w + ((b.w - a.w) * t);
+}
+
 // computes dot product of 2 vectors
 float Vector4::dot(const Vector4& left, const Vector4& right) {
     return left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;

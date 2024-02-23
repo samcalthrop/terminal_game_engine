@@ -13,6 +13,7 @@ class Vector3 {
         static void add(const Vector3& left, const Vector3& right, Vector3& dest);
         static void sub(const Vector3& left, const Vector3& right, Vector3& dest);
         static void mul(const Vector3& left, const Vector3& right, Vector3& dest);
+        static void lerp(const Vector3& a, const Vector3& b, float t, Vector3& dest);
         static void cross(const Vector3& a, const Vector3& b, Vector3& dest);
 
         static float dot(const Vector3& a, const Vector3& b);
@@ -23,15 +24,6 @@ class Vector3 {
         void scale(float s);
         void normalise();
 
-        inline float getX() const {return x;}
-        inline float getY() const {return y;}
-        inline float getZ() const {return z;}
-
-        inline void setX(float x){this->x = x;}
-        inline void setY(float y){this->y = y;}
-        inline void setZ(float z){this->z = z;}
-
-    private:
         float x, y, z;
 };
 

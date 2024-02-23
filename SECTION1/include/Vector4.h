@@ -13,6 +13,7 @@ class Vector4 {
         static void add(const Vector4& left, const Vector4& right, Vector4& dest);
         static void sub(const Vector4& left, const Vector4& right, Vector4& dest);
         static void mul(const Vector4& left, const Vector4& right, Vector4& dest);
+        static void lerp(const Vector4& a, const Vector4& b, float t, Vector4& dest);
 
         static float dot(const Vector4& a, const Vector4& b);
         static float dist(const Vector4& a, const Vector4& b);
@@ -21,17 +22,6 @@ class Vector4 {
         void scale(float s);
         void normalise();
 
-        inline float getX() const {return x;}
-        inline float getY() const {return y;}
-        inline float getZ() const {return z;}
-        inline float getW() const {return w;}
-
-        inline void setX(float x){this->x = x;}
-        inline void setY(float y){this->y = y;}
-        inline void setZ(float z){this->z = z;}
-        inline void setW(float w){this->w = w;}
-
-    private:
         float x, y, z, w;
 };
 

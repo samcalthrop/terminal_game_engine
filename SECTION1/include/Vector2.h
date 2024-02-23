@@ -13,6 +13,7 @@ class Vector2 {
         static void add(const Vector2& left, const Vector2& right, Vector2& dest);
         static void sub(const Vector2& left, const Vector2& right, Vector2& dest);
         static void mul(const Vector2& left, const Vector2& right, Vector2& dest);
+        static void lerp(const Vector2& a, const Vector2& b, float t, Vector2& dest);
 
         static float dot(const Vector2& a, const Vector2& b);
         static float angle(const Vector2& a, const Vector2& b);
@@ -21,14 +22,7 @@ class Vector2 {
 
         void scale(float s);
         void normalise();
-
-        inline float getX() const {return x;}
-        inline float getY() const {return y;}
-
-        inline void setX(float x){this->x = x;}
-        inline void setY(float y){this->y = y;}
-
-    private:
+        
         float x, y;
 };
 

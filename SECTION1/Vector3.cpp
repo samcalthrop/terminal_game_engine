@@ -48,6 +48,16 @@ void Vector3::mul(const Vector3& left, const Vector3& right, Vector3& dest) {
     dest.z = left.z * right.z;
 }
 
+// linearly interpolate between 2 vectors based on a floating point, t,
+// representing a fraction of the distance between the 2 vectors, i.e 
+// t=0 -> point is at vec A, t=0.5 -> point is halfway between vec A dn vec B etc.
+
+void Vector3::lerp(const Vector3& a, const Vector3& b, float t, Vector3& dest){
+    dest.x = a.x + ((b.x - a.x) * t);
+    dest.y = a.y + ((b.y - a.y) * t);
+    dest.z = a.z + ((b.z - a.z) * t);
+}
+
 // computes cross product of 2 vectors
 void Vector3::cross(const Vector3& a, const Vector3& b, Vector3& dest) {
     dest.x = (a.y * b.z) - (a.z * b.y);
