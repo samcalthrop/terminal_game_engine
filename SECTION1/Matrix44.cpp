@@ -147,6 +147,47 @@ void Matrix44::trans(const Matrix44& left, const Vector4& right, Vector4& dest){
     dest.w = w;
 }
 
+// incremental operators
+Matrix44& Matrix44::operator+=(const Matrix44& right){
+    Matrix44::add(*this, right, *this);
+    return *this;
+}
+
+Matrix44& Matrix44::operator-=(const Matrix44& right){
+    Matrix44::sub(*this, right, *this);
+    return *this;
+}
+
+Matrix44& Matrix44::operator*=(const Matrix44& right){
+    Matrix44::mul(*this, right, *this);
+    return *this;
+}
+
+// literal operators
+Matrix44 Matrix44::operator+(const Matrix44& right){
+    Matrix44 ret;
+    Matrix44::add(*this, right, ret);
+    return ret;
+}
+
+Matrix44 Matrix44::operator-(const Matrix44& right){
+    Matrix44 ret;
+    Matrix44::sub(*this, right, ret);
+    return ret;
+}
+
+Matrix44 Matrix44::operator*(const Matrix44& right){
+    Matrix44 ret;
+    Matrix44::mul(*this, right, ret);
+    return ret;
+}
+
+Vector4 Matrix44::operator*(const Vector4& vec){
+    Vector4 ret;
+    Matrix44::trans(*this, vec, ret);
+    return ret;
+}
+
 // set idientity matrix
 void Matrix44::setIdentity(){
     m00 = 1;

@@ -16,13 +16,21 @@ class Vector3 {
         static void lerp(const Vector3& a, const Vector3& b, float t, Vector3& dest);
         static void cross(const Vector3& a, const Vector3& b, Vector3& dest);
 
+		Vector3& operator%=(const Vector3& right);
+		Vector3& operator+=(const Vector3& right);
+		Vector3& operator-=(const Vector3& right);
+		Vector3 operator+(const Vector3& right);
+		Vector3 operator-(const Vector3& right);
+		Vector3 operator%(const Vector3& right);
+		float operator*(const Vector3& b);
+
         static float dot(const Vector3& a, const Vector3& b);
         static float angle(const Vector3& a, const Vector3& b);
         static float dist(const Vector3& a, const Vector3& b);
         static Vector3 getNormalised(const Vector3& v);
 
-        void scale(float s);
-        void normalise();
+        Vector3& scale(float s);
+		Vector3& normalise();
 
         float x, y, z;
 };

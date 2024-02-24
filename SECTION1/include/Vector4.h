@@ -15,12 +15,18 @@ class Vector4 {
         static void mul(const Vector4& left, const Vector4& right, Vector4& dest);
         static void lerp(const Vector4& a, const Vector4& b, float t, Vector4& dest);
 
+		Vector4& operator+=(const Vector4& right);
+		Vector4& operator-=(const Vector4& right);
+		Vector4 operator+(const Vector4& right);
+		Vector4 operator-(const Vector4& right);
+		float operator*(const Vector4& b);
+
         static float dot(const Vector4& a, const Vector4& b);
         static float dist(const Vector4& a, const Vector4& b);
         static Vector4 getNormalised(const Vector4& v);
 
-        void scale(float s);
-        void normalise();
+		Vector4& scale(float s);
+		Vector4& normalise();
 
         float x, y, z, w;
 };

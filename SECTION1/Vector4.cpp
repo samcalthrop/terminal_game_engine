@@ -63,6 +63,34 @@ void Vector4::lerp(const Vector4& a, const Vector4& b, float t, Vector4& dest){
     dest.w = a.w + ((b.w - a.w) * t);
 }
 
+// incremental operators
+Vector4& Vector4::operator+=(const Vector4& right){
+    Vector4::add(*this, right, *this);
+    return *this;
+}
+
+Vector4& Vector4::operator-=(const Vector4& right){
+    Vector4::sub(*this, right, *this);
+    return *this;
+}
+
+// literal operators
+Vector4 Vector4::operator+(const Vector4& right){
+    Vector4 ret;
+    Vector4::add(*this, right, *this);
+    return ret;
+}
+
+Vector4 Vector4::operator-(const Vector4& right){
+    Vector4 ret;
+    Vector4::sub(*this, right, *this);
+    return ret;
+}
+
+float Vector4::operator*(const Vector4& b){
+    return Vector4::dot(*this, b);
+}
+
 // computes dot product of 2 vectors
 float Vector4::dot(const Vector4& left, const Vector4& right) {
     return left.x * right.x + left.y * right.y + left.z * right.z + left.w * right.w;
@@ -87,18 +115,25 @@ Vector4 Vector4::getNormalised(const Vector4& v) {
 }
 
 // scales vector by a constant
-void Vector4::scale(float s) {
+Vector4& Vector4::scale(float s) {
     x *= s;
     y *= s;
     z *= s;
     w *= s;
+
+    return *this;
 }
 
 // finds normalised vector
-void Vector4::normalise() {
+Vector4& Vector4::normalise() {
     float magnitude = length();
+
+    if(magnitude == 0) return *this;
+
     x /= magnitude;
     y /= magnitude;
     z /= magnitude;
     w /= magnitude;
+
+    return *this;
 }

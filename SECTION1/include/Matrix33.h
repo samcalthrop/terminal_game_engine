@@ -16,6 +16,14 @@ class Matrix33{
         static void mul(const Matrix33& left, const Matrix33& right, Matrix33& dest);
         static void trans(const Matrix33& left, const Vector3& right, Vector3& dest);
 
+        Matrix33& operator+=(const Matrix33& right);
+        Matrix33& operator-=(const Matrix33& right);
+        Matrix33& operator*=(const Matrix33& right);
+        Matrix33 operator+(const Matrix33& right);
+        Matrix33 operator-(const Matrix33& right);
+        Matrix33 operator*(const Matrix33& right);
+        Vector3 operator*(const Vector3& vec);
+
         void setIdentity();
         void setZero();
     

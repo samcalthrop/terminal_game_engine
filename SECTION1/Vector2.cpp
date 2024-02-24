@@ -53,6 +53,34 @@ void Vector2::lerp(const Vector2& a, const Vector2& b, float t, Vector2& dest){
     dest.y = a.y + ((b.y - a.y) * t);
 }
 
+// incremental operators
+Vector2& Vector2::operator+=(const Vector2& right){
+    Vector2::add(*this, right, *this);
+    return *this;
+}
+
+Vector2& Vector2::operator-=(const Vector2& right){
+    Vector2::sub(*this, right, *this);
+    return *this;
+}
+
+// literal operators
+Vector2 Vector2::operator+(const Vector2& right){
+    Vector2 ret;
+    Vector2::add(*this, right, ret);
+    return ret;
+}
+
+Vector2 Vector2::operator-(const Vector2& right){
+    Vector2 ret;
+    Vector2::sub(*this, right, ret);
+    return ret;
+}
+
+float Vector2::operator*(const Vector2& b){
+    return Vector2::dot(*this, b);
+}
+
 // computes dot product of 2 vectors
 float Vector2::dot(const Vector2& left, const Vector2& right) {
     return left.x * right.x + left.y * right.y;
@@ -82,14 +110,21 @@ Vector2 Vector2::getNormalised(const Vector2& v) {
 }
 
 // scales vector by a constant
-void Vector2::scale(float s) {
+Vector2& Vector2::scale(float s) {
     x *= s;
     y *= s;
+
+    return *this;
 }
 
 // finds normalised vector
-void Vector2::normalise() {
+Vector2& Vector2::normalise() {
     float magnitude = length();
+
+    if(magnitude == 0) return *this;
+    
     x /= magnitude;
     y /= magnitude;
+
+    return *this;
 }

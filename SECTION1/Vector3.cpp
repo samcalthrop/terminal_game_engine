@@ -65,6 +65,45 @@ void Vector3::cross(const Vector3& a, const Vector3& b, Vector3& dest) {
     dest.z = (a.x * b.y) - (a.y * b.x);
 }
 
+// incremental operators
+Vector3& Vector3::operator%=(const Vector3& right){
+    Vector3::cross(*this, right, *this);
+    return *this;
+}
+
+Vector3& Vector3::operator+=(const Vector3& right){
+    Vector3::add(*this, right, *this);
+    return *this;
+}
+
+Vector3& Vector3::operator-=(const Vector3& right){
+    Vector3::sub(*this, right, *this);
+    return *this;
+}
+
+// literal operators
+Vector3 Vector3::operator+(const Vector3& right){
+    Vector3 ret;
+    Vector3::add(*this, right, ret);
+    return ret;
+}
+
+Vector3 Vector3::operator-(const Vector3& right){
+    Vector3 ret;
+    Vector3::sub(*this, right, ret);
+    return ret;
+}
+
+Vector3 Vector3::operator%(const Vector3& right){
+    Vector3 ret;
+    Vector3::cross(*this, right, ret);
+    return ret;
+}
+
+float Vector3::operator*(const Vector3& b){
+    return Vector3::dot(*this, b);
+}
+
 // computes dot product of 2 vectors
 float Vector3::dot(const Vector3& left, const Vector3& right) {
     return left.x * right.x + left.y * right.y + left.z * right.z;
@@ -95,16 +134,23 @@ Vector3 Vector3::getNormalised(const Vector3& v) {
 }
 
 // scales vector by a constant
-void Vector3::scale(float s) {
+Vector3& Vector3::scale(float s) {
     x *= s;
     y *= s;
     z *= s;
+
+    return *this;
 }
 
 // finds normalised vector
-void Vector3::normalise() {
+Vector3& Vector3::normalise() {
     float magnitude = length();
+    
+    if(magnitude == 0) return *this;
+    
     x /= magnitude;
     y /= magnitude;
     z /= magnitude;
+    
+    return *this;
 }

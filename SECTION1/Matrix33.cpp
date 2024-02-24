@@ -99,6 +99,47 @@ void Matrix33::trans(const Matrix33& left, const Vector3& right, Vector3& dest){
     dest.z = z;
 }
 
+// incremental operators
+Matrix33& Matrix33::operator+=(const Matrix33& right){
+    Matrix33::add(*this, right, *this);
+    return *this;
+}
+
+Matrix33& Matrix33::operator-=(const Matrix33& right){
+    Matrix33::sub(*this, right, *this);
+    return *this;
+}
+
+Matrix33& Matrix33::operator*=(const Matrix33& right){
+    Matrix33::mul(*this, right, *this);
+    return *this;
+}
+
+// literal operators
+Matrix33 Matrix33::operator+(const Matrix33& right){
+    Matrix33 ret;
+    Matrix33::add(*this, right, ret);
+    return ret;
+}
+
+Matrix33 Matrix33::operator-(const Matrix33& right){
+    Matrix33 ret;
+    Matrix33::sub(*this, right, ret);
+    return ret;
+}
+
+Matrix33 Matrix33::operator*(const Matrix33& right){
+    Matrix33 ret;
+    Matrix33::mul(*this, right, ret);
+    return ret;
+}
+
+Vector3 Matrix33::operator*(const Vector3& vec){
+    Vector3 ret;
+    Matrix33::trans(*this, vec, ret);
+    return ret;
+}
+
 // set identity matrix
 void Matrix33::setIdentity(){
 	m00 = 1;

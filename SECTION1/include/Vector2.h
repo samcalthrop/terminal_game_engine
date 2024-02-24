@@ -15,13 +15,19 @@ class Vector2 {
         static void mul(const Vector2& left, const Vector2& right, Vector2& dest);
         static void lerp(const Vector2& a, const Vector2& b, float t, Vector2& dest);
 
+        Vector2& operator+=(const Vector2& right);
+		Vector2& operator-=(const Vector2& right);
+		Vector2 operator+(const Vector2& right);
+		Vector2 operator-(const Vector2& right);
+		float operator*(const Vector2& b);
+
         static float dot(const Vector2& a, const Vector2& b);
         static float angle(const Vector2& a, const Vector2& b);
         static float dist(const Vector2& a, const Vector2& b);
         static Vector2 getNormalised(const Vector2& v);
 
-        void scale(float s);
-        void normalise();
+        Vector2& scale(float s);
+        Vector2& normalise();
         
         float x, y;
 };
