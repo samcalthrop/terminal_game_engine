@@ -65,19 +65,19 @@ Vector2& Vector2::operator-=(const Vector2& right){
 }
 
 // literal operators
-Vector2 Vector2::operator+(const Vector2& right){
+Vector2 Vector2::operator+(const Vector2& right) const {
     Vector2 ret;
     Vector2::add(*this, right, ret);
     return ret;
 }
 
-Vector2 Vector2::operator-(const Vector2& right){
+Vector2 Vector2::operator-(const Vector2& right) const {
     Vector2 ret;
     Vector2::sub(*this, right, ret);
     return ret;
 }
 
-float Vector2::operator*(const Vector2& b){
+float Vector2::operator*(const Vector2& b) const {
     return Vector2::dot(*this, b);
 }
 

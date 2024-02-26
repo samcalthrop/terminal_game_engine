@@ -75,19 +75,19 @@ Vector4& Vector4::operator-=(const Vector4& right){
 }
 
 // literal operators
-Vector4 Vector4::operator+(const Vector4& right){
+Vector4 Vector4::operator+(const Vector4& right) const {
     Vector4 ret;
-    Vector4::add(*this, right, *this);
+    Vector4::add(*this, right, ret);
     return ret;
 }
 
-Vector4 Vector4::operator-(const Vector4& right){
+Vector4 Vector4::operator-(const Vector4& right) const {
     Vector4 ret;
-    Vector4::sub(*this, right, *this);
+    Vector4::sub(*this, right, ret);
     return ret;
 }
 
-float Vector4::operator*(const Vector4& b){
+float Vector4::operator*(const Vector4& b) const {
     return Vector4::dot(*this, b);
 }
 

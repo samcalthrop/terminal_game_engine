@@ -19,10 +19,10 @@ class Matrix33{
         Matrix33& operator+=(const Matrix33& right);
         Matrix33& operator-=(const Matrix33& right);
         Matrix33& operator*=(const Matrix33& right);
-        Matrix33 operator+(const Matrix33& right);
-        Matrix33 operator-(const Matrix33& right);
-        Matrix33 operator*(const Matrix33& right);
-        Vector3 operator*(const Vector3& vec);
+        Matrix33 operator+(const Matrix33& right) const;
+        Matrix33 operator-(const Matrix33& right) const;
+        Matrix33 operator*(const Matrix33& right) const;
+        Vector3 operator*(const Vector3& vec) const;
 
         void setIdentity();
         void setZero();

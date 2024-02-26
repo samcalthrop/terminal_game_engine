@@ -7,39 +7,79 @@
 #include "Rasteriser.h"
 #include "Matrix44.h"
 #include "GenericMath.h"
+#include "Camera.h"
+
+float angle = 0;
+Rasterizer* rasterizer = nullptr;
+Camera* cam = nullptr;
+
+Vector4 v1(-1, 1, 0, 1);
+Vector4 v2(1, 1, 0, 1);
+Vector4 v3(0, -1, 0, 1);
+
+Vector4 transformVertex(const Vector4& vertex, const Matrix44& MVPMatrix) {
+    Vector4 f;
+
+    f = MVPMatrix * vertex;
+    f.x /= f.w;
+    f.y /= f.w;
+    f.z /= f.w;
+
+    return f;
+}
+
+bool renderCB() {
+    Matrix44 transformation;
+    Matrix44 PVMatrix;
+    Matrix44 finalMatrix;
+
+    cam->calculateViewMatrix();
+    PVMatrix = cam->getPVMatrix();
+
+    angle += .001f;
+    transformation.translate(Vector3(0, 0, -2));
+    transformation.rotate(Vector3(0, 1, 1), angle);
+    finalMatrix = PVMatrix * transformation;
+
+    Vector4 fv1 = transformVertex(v1, finalMatrix);
+    Vector4 fv2 = transformVertex(v2, finalMatrix);
+    Vector4 fv3 = transformVertex(v3, finalMatrix);
+
+    rasterizer->clearFrame();
+    rasterizer->rasterizeTriangle(Vector2(fv1.x, fv1.y), Vector2(fv2.x, fv2.y), Vector2(fv3.x, fv3.y));
+
+    return true;
+}
 
 int main(void){
 	initscr();
 	raw();
 	noecho();
-    
-    Razterizer razterizer(WW, WH);
+    start_color();
+    cbreak();
+    curs_set(0);
 
-    float angle = 0;
+    rasterizer = new Rasterizer(WW, WH);
+    cam = new Camera();
+    cam->createProjection(1.6f, WW / (float)2 / WH, .2f, 400);
 
-    while (angle < 360) {
-        Matrix44 transformation;
-        transformation.scale(Vector3(4, 2, 1));
-        transformation.rotate(Vector3(1, 1, 1), GenericMath::toRadians(angle));
+    rasterizer->setRenderCB(renderCB);
 
-        Vector4 v1(10, 10, 1, 1);
-        Vector4 v2(20, 10, 1, 1);
-        Vector4 v3(15, 20, 1, 1);
+    while(true){
+        rasterizer->presentFrame();
+        rasterizer->swapBuffers();
 
-        v1 = transformation * v1;
-        v2 = transformation * v2;
-        v3 = transformation * v3;
-
-        razterizer.clearFrame();
-        razterizer.razterizeTriangle(Vector2(v1.x, v1.y), Vector2(v2.x, v2.y), Vector2(v3.x, v3.y));
-        razterizer.presentFrame(0, 0);
-
-        getch();
-        angle += 10;
-        clear();
+        refresh();
+        erase();
     }
 
+    getch();
+    clear();
+
     endwin();
+
+    delete rasterizer;
+    delete cam;
 
     return 0;
 }

@@ -82,25 +82,25 @@ Vector3& Vector3::operator-=(const Vector3& right){
 }
 
 // literal operators
-Vector3 Vector3::operator+(const Vector3& right){
+Vector3 Vector3::operator+(const Vector3& right) const {
     Vector3 ret;
     Vector3::add(*this, right, ret);
     return ret;
 }
 
-Vector3 Vector3::operator-(const Vector3& right){
+Vector3 Vector3::operator-(const Vector3& right) const {
     Vector3 ret;
     Vector3::sub(*this, right, ret);
     return ret;
 }
 
-Vector3 Vector3::operator%(const Vector3& right){
+Vector3 Vector3::operator%(const Vector3& right) const {
     Vector3 ret;
     Vector3::cross(*this, right, ret);
     return ret;
 }
 
-float Vector3::operator*(const Vector3& b){
+float Vector3::operator*(const Vector3& b) const {
     return Vector3::dot(*this, b);
 }
 

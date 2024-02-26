@@ -20,10 +20,10 @@ class Matrix44{
         Matrix44& operator+=(const Matrix44& right);
         Matrix44& operator-=(const Matrix44& right);
         Matrix44& operator*=(const Matrix44& right);
-        Matrix44 operator+(const Matrix44& right);
-        Matrix44 operator-(const Matrix44& right);
-        Matrix44 operator*(const Matrix44& right);
-        Vector4 operator*(const Vector4& vec);
+        Matrix44 operator+(const Matrix44& right) const;
+        Matrix44 operator-(const Matrix44& right) const;
+        Matrix44 operator*(const Matrix44& right) const;
+        Vector4 operator*(const Vector4& vec) const;
     
         void setIdentity(); 
         void setZero();

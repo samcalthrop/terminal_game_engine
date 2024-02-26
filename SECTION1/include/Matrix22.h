@@ -19,10 +19,10 @@ class Matrix22{
         Matrix22& operator+=(const Matrix22& right);
         Matrix22& operator-=(const Matrix22& right);
         Matrix22& operator*=(const Matrix22& right);
-        Matrix22 operator+(const Matrix22& right);
-        Matrix22 operator-(const Matrix22& right);
-        Matrix22 operator*(const Matrix22& right);
-        Vector2 operator*(const Vector2& vec);
+        Matrix22 operator+(const Matrix22& right) const;
+        Matrix22 operator-(const Matrix22& right) const;
+        Matrix22 operator*(const Matrix22& right) const;
+        Vector2 operator*(const Vector2& vec) const;
 
         Matrix22& setIdentity();
         Matrix22& setZero();

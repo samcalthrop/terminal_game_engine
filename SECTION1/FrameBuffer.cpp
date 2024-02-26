@@ -44,9 +44,9 @@ Framebuffer::~Framebuffer(){
     delete[] depthbuffer;
 }
 
-void Framebuffer::print(int offsetx, int offsety){
-    for(int i = offsetx; i < width; i++){
-        for(int j = offsety; j < height; j++){
+void Framebuffer::print(){
+    for(int i = 0; i < width; i++){
+        for(int j = 0; j < height; j++){
             int index = (width * j) + i;
 
             //if(!colorbuffer[index]) continue;

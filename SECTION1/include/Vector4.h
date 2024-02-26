@@ -17,9 +17,9 @@ class Vector4 {
 
 		Vector4& operator+=(const Vector4& right);
 		Vector4& operator-=(const Vector4& right);
-		Vector4 operator+(const Vector4& right);
-		Vector4 operator-(const Vector4& right);
-		float operator*(const Vector4& b);
+		Vector4 operator+(const Vector4& right) const;
+		Vector4 operator-(const Vector4& right) const;
+		float operator*(const Vector4& b) const;
 
         static float dot(const Vector4& a, const Vector4& b);
         static float dist(const Vector4& a, const Vector4& b);

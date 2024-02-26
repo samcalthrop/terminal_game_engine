@@ -24,7 +24,7 @@ class Framebuffer{
         inline int getWidth() const {return width;}
         inline int getHeight() const {return height;}
 
-        void print(int offsetx, int offsety);
+        void print();
 
     private:
         int width, height;

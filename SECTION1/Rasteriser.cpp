@@ -7,6 +7,7 @@
 #include "Matrix44.h"
 
 #include <math.h>
+#include <thread>
 
 static inline bool isPointInTriangle(int ptx, int pty, const Vector2& v1,
     const Vector2& v2, const Vector2& v3)
@@ -31,23 +32,44 @@ static inline bool isPointInTriangle(int ptx, int pty, const Vector2& v1,
     return ((one == two) && (two == three));
 }
 
-void Razterizer::initializeFramebuffer(int width, int height){
-    fb = new Framebuffer(width, height);
+void Rasterizer::presentFrame(){
+    if(renderCallback != nullptr){
+        std::thread renderThread(renderCallback);
+        pFrame->print();
+        renderThread.join();
+    }
 }
 
-Razterizer::Razterizer(int width, int height)
-    :fb(nullptr)
+void Rasterizer::initializeFramebuffer(int width, int height){
+    frameBuffers[0] = new Framebuffer(width, height);
+    frameBuffers[1] = new Framebuffer(width, height);
+    swapBuffers();
+}
+
+Rasterizer::Rasterizer(int width, int height)
+    :renderCallback(nullptr),
+    pFrame(nullptr),
+    rFrame(nullptr),
+    currentBuffer(0)
 {
     initializeFramebuffer(width, height);
 }
 
-Razterizer::~Razterizer(){
-    delete fb;
+Rasterizer::~Rasterizer(){
+    delete frameBuffers[0];
+    delete frameBuffers[1];
 }
 
-void Razterizer::razterizeTriangle(const Vector2& v1, const Vector2& v2, const Vector2& v3){
+void Rasterizer::rasterizeTriangle(const Vector2& vv1, const Vector2& vv2, const Vector2& vv3){
+    Framebuffer* fb = rFrame;
+
+    int h_width = fb->getWidth() / 2, h_height = fb->getHeight() / 2;
     int minx, maxx;
     int miny, maxy;
+
+    Vector2 v1 = Vector2(vv1.x * h_width + h_width, -vv1.y * h_height + h_height);
+    Vector2 v2 = Vector2(vv2.x * h_width + h_width, -vv2.y * h_height + h_height);
+    Vector2 v3 = Vector2(vv3.x * h_width + h_width, -vv3.y * h_height + h_height);
 
     minx = MAX(0, MIN(v1.x, MIN(v2.x, v3.x)));
     miny = MAX(0, MIN(v1.y, MIN(v2.y, v3.y)));
@@ -59,9 +81,6 @@ void Razterizer::razterizeTriangle(const Vector2& v1, const Vector2& v2, const V
         for(int i = minx; i < maxx; i++){
             if(isPointInTriangle(i, j, v1, v2, v3)){
                 fb->setPixel(i, j, '#', 0);
-            }
-            else {
-                fb->setPixel(i, j, '.', 0);
             }
         }
     }

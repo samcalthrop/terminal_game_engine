@@ -90,25 +90,25 @@ Matrix22& Matrix22::operator*=(const Matrix22& right){
 }
 
 // literal operations
-Matrix22 Matrix22::operator+(const Matrix22& right){
+Matrix22 Matrix22::operator+(const Matrix22& right) const {
     Matrix22 ret;
     Matrix22::add(*this, right, ret);
     return ret;
 }
 
-Matrix22 Matrix22::operator-(const Matrix22& right){
+Matrix22 Matrix22::operator-(const Matrix22& right) const {
     Matrix22 ret;
     Matrix22::sub(*this, right, ret);
     return ret;
 }
 
-Matrix22 Matrix22::operator*(const Matrix22& right){
+Matrix22 Matrix22::operator*(const Matrix22& right) const {
     Matrix22 ret;
     Matrix22::mul(*this, right, ret);
     return ret;
 }
 
-Vector2 Matrix22::operator*(const Vector2& vec){
+Vector2 Matrix22::operator*(const Vector2& vec) const {
     Vector2 ret;
     Matrix22::trans(*this, vec, ret);
     return ret;
