@@ -8,14 +8,16 @@
 #include "Matrix44.h"
 #include "GenericMath.h"
 #include "Camera.h"
+#include "Loader.h" 
+#include <unordered_map>
+
 
 float angle = 0;
 Rasterizer* rasterizer = nullptr;
 Camera* cam = nullptr;
 
-Vector4 v1(-1, 1, 0, 1);
-Vector4 v2(1, 1, 0, 1);
-Vector4 v3(0, -1, 0, 1);
+IndexedModel model;
+
 
 Vector4 transformVertex(const Vector4& vertex, const Matrix44& MVPMatrix) {
     Vector4 f;
@@ -29,6 +31,8 @@ Vector4 transformVertex(const Vector4& vertex, const Matrix44& MVPMatrix) {
 }
 
 bool renderCB() {
+    rasterizer->clearFrame();
+    
     Matrix44 transformation;
     Matrix44 PVMatrix;
     Matrix44 finalMatrix;
@@ -37,21 +41,33 @@ bool renderCB() {
     PVMatrix = cam->getPVMatrix();
 
     angle += .001f;
-    transformation.translate(Vector3(0, 0, -2));
-    transformation.rotate(Vector3(0, 1, 1), angle);
+    
+    transformation.translate(Vector3(0, 0, -2.2f));
+    transformation.rotate(Vector3(.2, 1, .4).normalise(), angle);
     finalMatrix = PVMatrix * transformation;
 
-    Vector4 fv1 = transformVertex(v1, finalMatrix);
-    Vector4 fv2 = transformVertex(v2, finalMatrix);
-    Vector4 fv3 = transformVertex(v3, finalMatrix);
+    for(int i = 0; i < model.indexCount; i += 3) {
+        Vector4 v1(model.positions[(3 * model.indices[i + 0]) + 0], model.positions[(3 * model.indices[i + 0]) + 1], model.positions[(3 * model.indices[i + 0]) + 2], 1);
+        Vector4 v2(model.positions[(3 * model.indices[i + 1]) + 0], model.positions[(3 * model.indices[i + 1]) + 1], model.positions[(3 * model.indices[i + 1]) + 2], 1);
+        Vector4 v3(model.positions[(3 * model.indices[i + 2]) + 0], model.positions[(3 * model.indices[i + 2]) + 1], model.positions[(3 * model.indices[i + 2]) + 2], 1);
 
-    rasterizer->clearFrame();
-    rasterizer->rasterizeTriangle(Vector2(fv1.x, fv1.y), Vector2(fv2.x, fv2.y), Vector2(fv3.x, fv3.y));
+        Vector4 fv1 = transformVertex(v1, finalMatrix);
+        Vector4 fv2 = transformVertex(v2, finalMatrix);
+        Vector4 fv3 = transformVertex(v3, finalMatrix);
+
+        rasterizer->rasterizeTriangle(Vector2(fv1.x, fv1.y), Vector2(fv2.x, fv2.y), Vector2(fv3.x, fv3.y));
+    }
+
 
     return true;
 }
 
 int main(void){
+    if(!loadIndexedModel("res/Cube.obj", model)) {
+        std::cout << "Failed to load model";
+        return -1;
+    }
+
 	initscr();
 	raw();
 	noecho();
@@ -61,7 +77,7 @@ int main(void){
 
     rasterizer = new Rasterizer(WW, WH);
     cam = new Camera();
-    cam->createProjection(1.6f, WW / (float)2 / WH, .2f, 400);
+    cam->createProjection(1.21f, (WW / (float)2) / WH, .2f, 400);
 
     rasterizer->setRenderCB(renderCB);
 
