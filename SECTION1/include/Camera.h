@@ -26,6 +26,14 @@ class Camera{
             return projMatrix * viewMatrix; 
         }
 
+        inline Matrix44 getViewMatrix() {
+            return viewMatrix;
+        }
+
+        inline Matrix44 getProjectionMatrix() {
+            return projMatrix;
+        }
+
         void createProjection(float fov, float aspect, float nearPlane, float farPlane);
 
     private:

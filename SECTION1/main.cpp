@@ -8,65 +8,62 @@
 #include "Matrix44.h"
 #include "GenericMath.h"
 #include "Camera.h"
-#include "Loader.h" 
+#include "Loader.h"
+
 #include <unordered_map>
+
+#include "ShaderProgram.h"
+#include "BasicShader.h"
 
 
 float angle = 0;
-Rasterizer* rasterizer = nullptr;
+RenderContext* renderContext;
 Camera* cam = nullptr;
 
 IndexedModel model;
+VertexArrayObject modelVAO(3);
 
+BasicVertexShader vs;
+FragmentShader fs(1000);
+ShaderProgram shader((VertexShader*)&vs, &fs);
 
-Vector4 transformVertex(const Vector4& vertex, const Matrix44& MVPMatrix) {
-    Vector4 f;
+bool renderCB(){
+    renderContext->getRasterizer()->clearFrame();
 
-    f = MVPMatrix * vertex;
-    f.x /= f.w;
-    f.y /= f.w;
-    f.z /= f.w;
-
-    return f;
-}
-
-bool renderCB() {
-    rasterizer->clearFrame();
-    
     Matrix44 transformation;
     Matrix44 PVMatrix;
     Matrix44 finalMatrix;
 
     cam->calculateViewMatrix();
-    PVMatrix = cam->getPVMatrix();
 
-    angle += .001f;
-    
-    transformation.translate(Vector3(0, 0, -2.2f));
-    transformation.rotate(Vector3(.2, 1, .4).normalise(), angle);
-    finalMatrix = PVMatrix * transformation;
+    angle += .0006f;
 
-    for(int i = 0; i < model.indexCount; i += 3) {
-        Vector4 v1(model.positions[(3 * model.indices[i + 0]) + 0], model.positions[(3 * model.indices[i + 0]) + 1], model.positions[(3 * model.indices[i + 0]) + 2], 1);
-        Vector4 v2(model.positions[(3 * model.indices[i + 1]) + 0], model.positions[(3 * model.indices[i + 1]) + 1], model.positions[(3 * model.indices[i + 1]) + 2], 1);
-        Vector4 v3(model.positions[(3 * model.indices[i + 2]) + 0], model.positions[(3 * model.indices[i + 2]) + 1], model.positions[(3 * model.indices[i + 2]) + 2], 1);
+    transformation.translate(Vector3(0, 0, -1.3f));
+    transformation.scale(Vector3(1, 1, 1));
+    transformation.rotate(Vector3(1, 1, 0).normalise(), angle);
 
-        Vector4 fv1 = transformVertex(v1, finalMatrix);
-        Vector4 fv2 = transformVertex(v2, finalMatrix);
-        Vector4 fv3 = transformVertex(v3, finalMatrix);
+    //set uniforms
+    vs.getUniforms()->set(vs.locationProjectionMatrix, cam->getProjectionMatrix());
+    vs.getUniforms()->set(vs.locationViewMatrix, cam->getViewMatrix());
+    vs.getUniforms()->set(vs.locationTransformation, transformation);
 
-        rasterizer->rasterizeTriangle(Vector2(fv1.x, fv1.y), Vector2(fv2.x, fv2.y), Vector2(fv3.x, fv3.y));
-    }
-
+    //render the object using the shader and the vao
+    renderContext->renderIndexedTriangles(shader, modelVAO);
 
     return true;
 }
 
 int main(void){
-    if(!loadIndexedModel("res/Cube.obj", model)) {
+    if(!loadIndexedModel("res/B.obj", model)) {
         std::cout << "Failed to load model";
         return -1;
     }
+
+    // load data into VAO
+    modelVAO.bufferData(0, model.positions, model.positionsCount, 3);
+    modelVAO.bufferData(1, model.uvs, model.uvsCount, 2);
+    modelVAO.bufferData(2, model.normals, model.normalsCount, 3);
+    modelVAO.bufferIndices(model.indices, model.indexCount);
 
 	initscr();
 	raw();
@@ -75,15 +72,15 @@ int main(void){
     cbreak();
     curs_set(0);
 
-    rasterizer = new Rasterizer(WW, WH);
+    renderContext = new RenderContext(WW, WH);
     cam = new Camera();
     cam->createProjection(1.21f, (WW / (float)2) / WH, .2f, 400);
 
-    rasterizer->setRenderCB(renderCB);
+    renderContext->getRasterizer()->setRenderCB(renderCB);
 
     while(true){
-        rasterizer->presentFrame();
-        rasterizer->swapBuffers();
+        renderContext->getRasterizer()->presentFrame();
+        renderContext->getRasterizer()->swapBuffers();
 
         refresh();
         erase();
@@ -94,7 +91,7 @@ int main(void){
 
     endwin();
 
-    delete rasterizer;
+    delete renderContext;
     delete cam;
 
     return 0;

@@ -85,3 +85,23 @@ void Rasterizer::rasterizeTriangle(const Vector2& vv1, const Vector2& vv2, const
         }
     }
 }
+
+void vertexShader(ShaderProgram& shader, VertexArrayObject& vao, int vertexIndex, Vector4& out) {
+    shader.executeVertexShader(vao.getBufferData(), vertexIndex, out);
+}
+
+void RenderContext::renderIndexedTriangles(ShaderProgram& shader, VertexArrayObject& vao) {
+    shader.prepare();
+    Vector4 v1, v2, v3;
+
+    for(int i = 0; i < vao.getIndicesCount(); i += 3) {
+        vertexShader(shader, vao, vao.getIndices()[i + 0], v1);
+        vertexShader(shader, vao, vao.getIndices()[i + 1], v2);
+        vertexShader(shader, vao, vao.getIndices()[i + 2], v3);
+
+        r.rasterizeTriangle(
+            Vector2(v1.x / v1.z, v1.y / v1.z), 
+            Vector2(v2.x / v2.z, v2.y / v2.z), 
+            Vector2(v3.x / v3.z, v3.y / v3.z));
+    }
+}

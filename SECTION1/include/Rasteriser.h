@@ -2,6 +2,9 @@
 #define INCLUDE_RASTERISER_H
 
 #include "FrameBuffer.h"
+#include "VertexArrayObject.h"
+#include "ShaderProgram.h"
+#include <thread>
 
 class Vector2;
 class Vector3;
@@ -39,6 +42,22 @@ class Rasterizer{
         Framebuffer* frameBuffers[2];
         int currentBuffer;
         void initializeFramebuffer(int width, int height);
+};
+
+class RenderContext {
+    public:
+        RenderContext(int fbWidth, int fbHeight)
+            : r(fbWidth, fbHeight)
+        {}
+
+        void renderIndexedTriangles(ShaderProgram& shader, VertexArrayObject& vao);
+
+        Rasterizer* getRasterizer() {
+            return &r;
+        }
+
+    private:
+        Rasterizer r;
 };
 
 #endif

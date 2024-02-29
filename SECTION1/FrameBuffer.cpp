@@ -7,6 +7,7 @@ void Framebuffer::recreate(int width, int height){
 
     colorbuffer = new colorbuffer_t[width * height];
     depthbuffer = new depthbuffer_t[width * height];
+    clear(0);
 }
 
 void Framebuffer::clear(int clearColor){
@@ -49,10 +50,10 @@ void Framebuffer::print(){
         for(int j = 0; j < height; j++){
             int index = (width * j) + i;
 
-            //if(!colorbuffer[index]) continue;
+            if(!colorbuffer[index]) continue;
 
-            int color = (char)(colorbuffer[index] >> 8);
-            attron(COLOR_PAIR(color));
+            // int color = (char)(colorbuffer[index] >> 8);
+            // attron(COLOR_PAIR(color));
 
             mvprintw(j, i, "%c", (char)colorbuffer[index]);
         }

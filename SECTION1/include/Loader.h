@@ -8,10 +8,14 @@
 class IndexedModel {
     public:
         int indexCount;
-        int* indices;
-        float* positions;
-        float* normals;
-        float* uvs;
+        int* indices = nullptr;
+        float* positions = nullptr;
+        float* normals = nullptr ;
+        float* uvs = nullptr;
+
+        int positionsCount;
+        int normalsCount;
+        int uvsCount;
 
     ~IndexedModel() {
         delete[] indices;

@@ -195,6 +195,10 @@ bool loadIndexedModel(const std::string& filePath, IndexedModel& model) {
     model.normals = new float[vertices.size() * 3];
     model.uvs = new float[vertices.size() * 2];
 
+    model.positionsCount = vertices.size() * 3;
+    model.normalsCount = vertices.size() * 3;
+    model.uvsCount = vertices.size() * 2;
+
     //loop through every vertex and write to each index the correct values from 
     for(std::unordered_map<Vertex, int>::iterator i = vertices.begin(); i != vertices.end(); i++) {
         model.positions[(i->second * 3) + 0] = positions[(i->first.pos * 3) + 0];
