@@ -16,7 +16,7 @@ class Rasterizer{
         Rasterizer(int width, int height);
         virtual ~Rasterizer();
 
-        void rasterizeTriangle(const Vector2& v1, const Vector2& v2, const Vector2& v3);
+        void rasterizeTriangle(const Vector4& vv1, const Vector4& vv2, const Vector4& vv3, ShaderProgram& shader, DataList** passAttributes);
 
         void presentFrame();
 

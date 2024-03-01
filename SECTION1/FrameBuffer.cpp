@@ -52,9 +52,6 @@ void Framebuffer::print(){
 
             if(!colorbuffer[index]) continue;
 
-            // int color = (char)(colorbuffer[index] >> 8);
-            // attron(COLOR_PAIR(color));
-
             mvprintw(j, i, "%c", (char)colorbuffer[index]);
         }
     }

@@ -9,7 +9,9 @@ class FragmentShader : public Shader {
             : Shader(uniformCount)
         {}
 
-        // virtual void execute()
+        virtual char execute(DataList* passAttributes, Vector4& out) {
+            return '#';
+        }
     
         virtual ~FragmentShader() {
             
