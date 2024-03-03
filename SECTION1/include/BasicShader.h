@@ -3,6 +3,7 @@
 
 #include "VertexShader.h"
 #include "FragmentShader.h"
+#include <curses.h>
 
 class BasicVertexShader : public VertexShader {
     public:

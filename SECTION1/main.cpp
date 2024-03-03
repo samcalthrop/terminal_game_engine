@@ -14,6 +14,8 @@
 #include "BasicShader.h"
 
 float angle = 0;
+float xpos = 0;
+int count = 0;
 
 RenderContext* renderContext;
 Camera* cam = nullptr;
@@ -24,7 +26,13 @@ BasicVertexShader vs;
 BasicFragmentShader fs;
 ShaderProgram shader((VertexShader*)&vs, (FragmentShader*)&fs);
 
-bool renderCB(){
+bool renderCB() {
+    count += 1;
+
+    if (xpos >= 6) {
+        xpos -= 12;
+    }
+    
     renderContext->getRasterizer()->clearFrame();
 
     Matrix44 transformation;
@@ -34,10 +42,11 @@ bool renderCB(){
     cam->calculateViewMatrix();
 
     angle += .005f;
+    xpos += .005f;
 
-    //make sure you are doing the rotation before the scale!
-    transformation.translate(Vector3(0, 0, -3.0f));
-    transformation.rotate(Vector3(1, 1, 1).normalise(), angle);
+    // perform operations in this order
+    transformation.translate(Vector3(xpos, 0, -3.0f));
+    transformation.rotate(Vector3(1, 0, 1).normalise(), angle);
     transformation.scale(Vector3(1, 1, 1));
 
     //set uniforms
@@ -54,7 +63,7 @@ bool renderCB(){
     return true;
 }
 
-int main(void){
+int main(void) {
     if(!loadIndexedModel("res/dome.obj", model)) {
         std::cout << "Failed to load model";
         return -1;
@@ -73,15 +82,37 @@ int main(void){
     cbreak();
     curs_set(0);
 
+    // set up colours
+    init_color(COLOR_BLACK, 0, 0, 0);
+    init_color(COLOR_RED, 160, 394, 421);
+    init_color(COLOR_GREEN, 250, 394, 421);
+    init_color(COLOR_YELLOW, 359, 394, 421);
+    init_color(COLOR_BLUE, 445, 394, 421);
+    init_color(COLOR_MAGENTA, 600, 394, 421);
+    init_color(COLOR_CYAN, 746, 394, 421);
+    init_color(COLOR_WHITE, 898, 394, 421);
+
+    // set up colour pairs
+    init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    init_pair(2, COLOR_RED, COLOR_BLACK);
+    init_pair(3, COLOR_GREEN, COLOR_BLACK);
+    init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+    init_pair(5, COLOR_BLUE, COLOR_BLACK);
+    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    init_pair(7, COLOR_CYAN, COLOR_BLACK);
+    init_pair(8, COLOR_WHITE, COLOR_BLACK);
+
     renderContext = new RenderContext(WW, WH);
     cam = new Camera();
     cam->createProjection(1.13, (WW / (float)2.0) / (WH), .2f, 400);
 
     renderContext->getRasterizer()->setRenderCB(renderCB);
 
-    while(true){
+    while(true) {
+        attron(COLOR_PAIR(6));
         renderContext->getRasterizer()->presentFrame();
         renderContext->getRasterizer()->swapBuffers();
+        attroff(COLOR_PAIR(6));
 
         refresh();
         erase();
