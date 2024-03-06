@@ -64,7 +64,7 @@ bool renderCB() {
 }
 
 int main(void) {
-    if(!loadIndexedModel("res/dome.obj", model)) {
+    if(!loadIndexedModel("res/cube.obj", model)) {
         std::cout << "Failed to load model";
         return -1;
     }
@@ -82,25 +82,25 @@ int main(void) {
     cbreak();
     curs_set(0);
 
-    // set up colours
-    init_color(COLOR_BLACK, 0, 0, 0);
-    init_color(COLOR_RED, 160, 394, 421);
-    init_color(COLOR_GREEN, 250, 394, 421);
-    init_color(COLOR_YELLOW, 359, 394, 421);
-    init_color(COLOR_BLUE, 445, 394, 421);
-    init_color(COLOR_MAGENTA, 600, 394, 421);
-    init_color(COLOR_CYAN, 746, 394, 421);
-    init_color(COLOR_WHITE, 898, 394, 421);
+    // // set up colours
+    // init_color(COLOR_BLACK, 0, 0, 0);
+    // init_color(COLOR_RED, 160, 394, 421);
+    // init_color(COLOR_GREEN, 250, 394, 421);
+    // init_color(COLOR_YELLOW, 359, 394, 421);
+    // init_color(COLOR_BLUE, 445, 394, 421);
+    // init_color(COLOR_MAGENTA, 600, 394, 421);
+    // init_color(COLOR_CYAN, 746, 394, 421);
+    // init_color(COLOR_WHITE, 898, 394, 421);
 
-    // set up colour pairs
-    init_pair(1, COLOR_BLACK, COLOR_BLACK);
-    init_pair(2, COLOR_RED, COLOR_BLACK);
-    init_pair(3, COLOR_GREEN, COLOR_BLACK);
-    init_pair(4, COLOR_YELLOW, COLOR_BLACK);
-    init_pair(5, COLOR_BLUE, COLOR_BLACK);
-    init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
-    init_pair(7, COLOR_CYAN, COLOR_BLACK);
-    init_pair(8, COLOR_WHITE, COLOR_BLACK);
+    // // set up colour pairs
+    // init_pair(1, COLOR_BLACK, COLOR_BLACK);
+    // init_pair(2, COLOR_RED, COLOR_BLACK);
+    // init_pair(3, COLOR_GREEN, COLOR_BLACK);
+    // init_pair(4, COLOR_YELLOW, COLOR_BLACK);
+    // init_pair(5, COLOR_BLUE, COLOR_BLACK);
+    // init_pair(6, COLOR_MAGENTA, COLOR_BLACK);
+    // init_pair(7, COLOR_CYAN, COLOR_BLACK);
+    // init_pair(8, COLOR_WHITE, COLOR_BLACK);
 
     renderContext = new RenderContext(WW, WH);
     cam = new Camera();
@@ -109,10 +109,10 @@ int main(void) {
     renderContext->getRasterizer()->setRenderCB(renderCB);
 
     while(true) {
-        attron(COLOR_PAIR(6));
+        // attron(COLOR_PAIR(6));
         renderContext->getRasterizer()->presentFrame();
         renderContext->getRasterizer()->swapBuffers();
-        attroff(COLOR_PAIR(6));
+        // attroff(COLOR_PAIR(6));
 
         refresh();
         erase();
