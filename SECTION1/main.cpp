@@ -64,7 +64,7 @@ bool renderCB() {
 }
 
 int main(void) {
-    if(!loadIndexedModel("res/cube.obj", model)) {
+    if(!loadIndexedModel("res/dome.obj", model)) {
         std::cout << "Failed to load model";
         return -1;
     }
