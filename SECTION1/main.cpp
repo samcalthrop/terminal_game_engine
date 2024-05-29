@@ -13,9 +13,15 @@
 #include "ShaderProgram.h"
 #include "BasicShader.h"
 
-float angle = 0;
-float xpos = 0;
+float angle = PI / 2;
+float donut_pos_x = 0;
+float donut_pos_y = 0;
+float donut_pos_z = -3.0f;
+Vector3 light_pos = Vector3(0, 0, 10);
+
 int count = 0;
+
+WINDOW* win;
 
 RenderContext* renderContext;
 Camera* cam = nullptr;
@@ -29,9 +35,15 @@ ShaderProgram shader((VertexShader*)&vs, (FragmentShader*)&fs);
 bool renderCB() {
     count += 1;
 
-    if (xpos >= 6) {
-        xpos -= 12;
+    angle += 0.005f;
+
+    if (donut_pos_x >= 6) {
+        donut_pos_x -= 12;
+    } else {
+        donut_pos_x += 0.005f;
     }
+
+    // light_pos += Vector3(0, 0, 0.001);
     
     renderContext->getRasterizer()->clearFrame();
 
@@ -41,12 +53,9 @@ bool renderCB() {
 
     cam->calculateViewMatrix();
 
-    angle += .005f;
-    xpos += .005f;
-
-    // perform operations in this order
-    transformation.translate(Vector3(xpos, 0, -3.0f));
-    transformation.rotate(Vector3(1, 0, 1).normalise(), angle);
+    // perform operations in this order per rendered frame
+    transformation.translate(Vector3(donut_pos_x, donut_pos_y, donut_pos_z));
+    transformation.rotate(Vector3(1, 0, 1).normalise(), angle); // rotate around y axis (0=axis of rotation in form (x, y, z))
     transformation.scale(Vector3(1, 1, 1));
 
     //set uniforms
@@ -55,7 +64,7 @@ bool renderCB() {
     vs.getUniforms()->set(vs.locationTransformation, transformation);
 
     //set the location of the light in the shader
-    vs.getUniforms()->set(vs.locationLightPosition, Vector3(0, 0, 10));
+    vs.getUniforms()->set(vs.locationLightPosition, light_pos);
 
     //render the object using the shader and the vao
     renderContext->renderIndexedTriangles(shader, modelVAO);
@@ -75,12 +84,14 @@ int main(void) {
     modelVAO.bufferData(2, model.normals, model.normalsCount, 3);
     modelVAO.bufferIndices(model.indices, model.indexCount);
 
-	initscr();
+	win = initscr();
 	raw();
 	noecho();
     start_color();
     cbreak();
     curs_set(0);
+    keypad(win, true);
+    nodelay(win, true);
 
     // // set up colours
     // init_color(COLOR_BLACK, 0, 0, 0);
