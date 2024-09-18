@@ -11,3 +11,14 @@ In its current state, the program can:
 - Load in and subsequently render `.obj` files
 - **Do all of the above using a shader to emulate a light source at a specified location**
 - and probably more, I can't remember
+
+## To run
+
+### On unix systems (mac/ linux):
+```
+make run
+```
+making use of the make file in the root directory. Or you can compile yourself directly using gcc or something maybe.
+
+### On windows:
+You're on your own
